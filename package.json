@@ -1,18 +1,10 @@
 {
-    "name": "the-best-coach",
-    "description": "Become the best coach",
+    "name": "spanish-football-fantasy",
+    "description": "Become the best spanish coach",
     "version": "0.0.1",
     "dependencies": {
-        "express": "4.13.3",
-        "body-parser": "1.14.2",
-        "socket.io": "1.4.4",
         "mongoose": "4.3.5",
-        "fbgraph": "mons54/fbgraph",
-        "ejs": "2.3.4",
         "q": "1.4.1"
-    },
-    "devDependencies": {
-        "supervisor": "x.x.x"
     },
     "repository": {
         "type" : "git", 

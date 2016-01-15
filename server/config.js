@@ -1,6 +1,6 @@
 module.exports = function (app, express, mongoose) {
 
-    mongoose.connect('mongodb://mons54:jsOL160884@ds045465.mongolab.com:45465/the-best-coach');
+    mongoose.connect('mongodb://mons54:jsOL160884@ds047075.mongolab.com:47075/spanish-football-fantasy');
 
     var staticPath = dirname + '/public/',
         bodyParser = require('body-parser');

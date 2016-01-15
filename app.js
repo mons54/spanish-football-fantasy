@@ -1,61 +1,17 @@
-var express     = require('express'),
-    app         = express(),
-    server      = require('http').createServer(app),
-    io          = require('socket.io')(server),
-    mongoose    = require('mongoose'),
-    fbgraph     = require('fbgraph'),
-    q           = require('q'),
-    crypto      = require('crypto');
-
 global.dirname = __dirname;
 
-require(dirname + '/server/config')(app, express, mongoose);
+const mongoose = require('mongoose');
+const q = require('q');
+const https = require('https');
+
+mongoose.connect('mongodb://mons54:jsOL160884@ds047075.mongolab.com:47075/spanish-football-fantasy');
 
 require(dirname + '/server/modules/mongoose')(mongoose, q);
 
-var competitions = [
-    {
-        dbid: 36,
-        name: "Champions League"
-    },
-    {
-        dbid: 2,
-        name: "English Premier League"
-    },
-    {
-        dbid: 46,
-        name: "Spanish La Liga"
-    },
-    {
-        dbid: 49,
-        name: "Italian Serie A"
-    },
-    {
-        dbid: 37,
-        name: "Europa League"
-    }
-];
-
-for (var i in competitions) {
-    mongoose.promise.save('competitions', competitions[i]);
-};
-
-// Test call teams of Champions League
-
-mongoose.promise.find('competitions').then(function (competitions) {
-    var competitionId = [];
-    for (var i in competitions) {
-        competitionId.push(competitions[i].dbid);
-    };
-    getTeams(competitionId) 
-});
-
-const https = require('https');
-
-function getTeams(competitionId) {
+function init() {
     var options = {
         hostname: 'api.crowdscores.com',
-        path: '/api/v1/teams?competition_ids=' + competitionId.join(','),
+        path: '/api/v1/teams?competition_ids=46',
         method: 'GET',
         headers: {
             'x-crowdscores-api-key': 'fcf2776e688647848681d216ebbf89ca'
@@ -134,4 +90,4 @@ function getPlayersTeam(players) {
     return result; 
 }
 
-server.listen(3000);
+init();
