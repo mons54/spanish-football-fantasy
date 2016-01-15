@@ -16,7 +16,18 @@ module.exports = function (mongoose) {
             defaultHomeVenue: Object,
             shirtUrl: String,
             shortName: String,
-            shortCode: String
+            shortCode: String,
+            players: Array
+        }),
+        players: new mongoose.Schema({
+            dbid: {
+                type: Number,
+                unique: true
+            },
+            position: String,
+            shortName: String,
+            name: String,
+            team: Number
         })
     };
 };
