@@ -21,6 +21,27 @@ module.exports = function (mongoose) {
             shortName: String,
             name: String,
             team: Number
+        }),
+        matches: new mongoose.Schema({
+            dbid: {
+                type: Number,
+                unique: true
+            },
+            matchevents: Array,
+            awayGoals: Number,
+            start: Number,
+            homeGoals: Number,
+            season: Object,
+            homeTeam: Object,
+            awayPlayers: Array,
+            dismissals: Object,
+            isResult: Boolean,
+            venue: Object,
+            awayTeam: Object,
+            homePlayers: Array,
+            outcome: Object,
+            round: Object,
+            currentState: Number
         })
     };
 };

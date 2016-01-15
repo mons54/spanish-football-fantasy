@@ -77,6 +77,18 @@ module.exports = function (mongoose, q) {
                 defer.resolve(response);
             });
             return defer.promise;
-        }
+        },
+        remove: function (model, request) {
+            var defer = q.defer();
+            mongoose.models[model]
+            .remove(request, function (error) {
+                if (error) {
+                    defer.reject(error);
+                    return;
+                }
+                defer.resolve(true);
+            });
+            return defer.promise;
+        },
     }
 };

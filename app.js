@@ -8,7 +8,7 @@ mongoose.connect('mongodb://mons54:jsOL160884@ds047075.mongolab.com:47075/spanis
 
 require(dirname + '/server/modules/mongoose')(mongoose, q);
 
-function init() {
+function initTeams() {
     var options = {
         hostname: 'api.crowdscores.com',
         path: '/api/v1/teams?competition_ids=46',
@@ -63,7 +63,7 @@ function saveTeam(teamId) {
             // Convert players to array
             data.players = getPlayersTeam(data.players);
             
-            // if exist update players list...
+            // if exist update players
             mongoose.promise.save('teams', data);
         });
     });
@@ -90,4 +90,77 @@ function getPlayersTeam(players) {
     return result; 
 }
 
-init();
+function initMatches() {
+    var options = {
+        hostname: 'api.crowdscores.com',
+        path: '/api/v1/matches?competition_id=46',
+        method: 'GET',
+        headers: {
+            'x-crowdscores-api-key': 'fcf2776e688647848681d216ebbf89ca'
+        }
+    };
+    var req = https.request(options, function (res) {
+        res.setEncoding('utf8');
+        var body = '';
+        res.on('data', function(data) {
+            body += data;
+        });
+        res.on('end', function() {
+            var data = JSON.parse(body);
+            for (var i in data) {
+                saveMatches(data[i]);
+            }
+        });
+    });
+
+    req.end();
+
+    req.on('error', function (e) {
+        console.error(e);
+    });
+}
+
+function saveMatches(data) {
+    mongoose.promise.save('matches', data)
+    .then(function (response) {
+        if (data.isResult) {
+            saveMatch(data.dbid); 
+        }
+    });
+}
+
+function saveMatch(matchId) {
+    var options = {
+        hostname: 'api.crowdscores.com',
+        path: '/api/v1/matches/' + matchId,
+        method: 'GET',
+        headers: {
+            'x-crowdscores-api-key': 'fcf2776e688647848681d216ebbf89ca'
+        }
+    };
+
+    var req = https.request(options, function (res) {
+        res.setEncoding('utf8');
+        var body = '';
+        res.on('data', function(data) {
+            body += data;
+        });
+        res.on('end', function() {
+            var data = JSON.parse(body);
+
+            // if exist update match
+            mongoose.promise.update('matches', { dbid: data.dbid }, data).then(function (response) {});
+        });
+    });
+
+    req.end();
+
+    req.on('error', function (e) {
+        console.error('err: ' + e);
+    });
+}
+
+initTeams();
+initMatches();
+
+
